@@ -1,16 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path"); 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Servir imágenes (IMPORTANTE)
-app.use("/images", express.static("images"));
+// Servir imágenes (CORREGIDO)
+app.use("/images", express.static(path.join(__dirname, "images")));
 
-/* =========================
-   DATOS DE PRUEBA
-========================= */
+/* DATOS DE PRUEBA */
 
 let movies = [
   {
@@ -19,7 +18,7 @@ let movies = [
     duration: "190 min",
     classification: "B",
     genre: "Ciencia Ficción",
-    imageName: "mario.jpg",
+    image: "https://apirest-y0s6.onrender.com/images/mario.jpg",
     showtimes: ["14:00", "18:00", "21:30"]
   },
   {
@@ -28,7 +27,7 @@ let movies = [
     duration: "175 min",
     classification: "B15",
     genre: "Acción",
-    imageName: "predator.jpg",
+    image: "https://apirest-y0s6.onrender.com/images/predator.jpg",
     showtimes: ["13:00", "16:30", "20:00"]
   },
   {
@@ -37,7 +36,7 @@ let movies = [
     duration: "92 min",
     classification: "A",
     genre: "Acción",
-    imageName: "avispon.jpg",
+    image: "https://apirest-y0s6.onrender.com/images/avispon.jpg",
     showtimes: ["11:00", "13:00", "15:00"]
   },
   {
@@ -46,7 +45,7 @@ let movies = [
     duration: "180 min",
     classification: "B",
     genre: "Comedia",
-    imageName: "rango.jpg",
+    image: "https://apirest-y0s6.onrender.com/images/rango.jpg",
     showtimes: ["15:00", "19:00"]
   },
   {
@@ -55,7 +54,7 @@ let movies = [
     duration: "114 min",
     classification: "C",
     genre: "Drama",
-    imageName: "warfare.jpg",
+    image: "https://apirest-y0s6.onrender.com/images/warfare.jpg",
     showtimes: ["12:00", "14:30", "17:00"]
   }
 ];
@@ -63,21 +62,16 @@ let movies = [
 // Butacas
 let seats = Array(5).fill(null).map(() => Array(5).fill(0));
 
-/* =========================
-   RUTAS
-========================= */
+/*  RUTAS */
 
-// Ruta base
 app.get("/", (req, res) => {
   res.send("API de Cine funcionando 🎬");
 });
 
-// Obtener películas
 app.get("/movies", (req, res) => {
   res.json(movies);
 });
 
-// Obtener película por ID
 app.get("/movies/:id", (req, res) => {
   const movie = movies.find(m => m.id == req.params.id);
 
@@ -88,12 +82,10 @@ app.get("/movies/:id", (req, res) => {
   res.json(movie);
 });
 
-// Obtener butacas
 app.get("/seats", (req, res) => {
   res.json(seats);
 });
 
-// Reservar butaca
 app.post("/seats/reserve", (req, res) => {
   const { row, col } = req.body;
 
@@ -105,7 +97,6 @@ app.post("/seats/reserve", (req, res) => {
   res.json({ message: "Butaca reservada", seats });
 });
 
-// Agregar película
 app.post("/movies", (req, res) => {
   const newMovie = {
     id: movies.length + 1,
@@ -116,9 +107,7 @@ app.post("/movies", (req, res) => {
   res.json(newMovie);
 });
 
-/* =========================
-   SERVIDOR
-========================= */
+/* SERVIDOR  */
 
 const PORT = process.env.PORT || 3000;
 
