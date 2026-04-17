@@ -5,9 +5,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* DATOS DE PRUEBA */
+// ✅ Servir imágenes (IMPORTANTE)
+app.use("/images", express.static("images"));
 
-// Películas (basadas en tu modelo)
+/* =========================
+   DATOS DE PRUEBA
+========================= */
+
 let movies = [
   {
     id: 1,
@@ -15,7 +19,7 @@ let movies = [
     duration: "190 min",
     classification: "B",
     genre: "Ciencia Ficción",
-    imageName: "mario",
+    imageName: "mario.jpg",
     showtimes: ["14:00", "18:00", "21:30"]
   },
   {
@@ -24,7 +28,7 @@ let movies = [
     duration: "175 min",
     classification: "B15",
     genre: "Acción",
-    imageName: "predator",
+    imageName: "predator.jpg",
     showtimes: ["13:00", "16:30", "20:00"]
   },
   {
@@ -33,7 +37,7 @@ let movies = [
     duration: "92 min",
     classification: "A",
     genre: "Acción",
-    imageName: "avispon",
+    imageName: "avispon.jpg",
     showtimes: ["11:00", "13:00", "15:00"]
   },
   {
@@ -42,7 +46,7 @@ let movies = [
     duration: "180 min",
     classification: "B",
     genre: "Comedia",
-    imageName: "rango",
+    imageName: "rango.jpg",
     showtimes: ["15:00", "19:00"]
   },
   {
@@ -51,25 +55,32 @@ let movies = [
     duration: "114 min",
     classification: "C",
     genre: "Drama",
-    imageName: "warfare",
+    imageName: "warfare.jpg",
     showtimes: ["12:00", "14:30", "17:00"]
   }
 ];
 
-// Matriz de butacas (0 libre, 1 ocupado)
+// Butacas
 let seats = Array(5).fill(null).map(() => Array(5).fill(0));
 
-/* ENDPOINTS */
+/* =========================
+   RUTAS
+========================= */
 
-// GET - Obtener todas las películas
+// Ruta base
+app.get("/", (req, res) => {
+  res.send("API de Cine funcionando 🎬");
+});
+
+// Obtener películas
 app.get("/movies", (req, res) => {
   res.json(movies);
 });
 
-// GET - Obtener una película por ID
+// Obtener película por ID
 app.get("/movies/:id", (req, res) => {
   const movie = movies.find(m => m.id == req.params.id);
-  
+
   if (!movie) {
     return res.status(404).json({ message: "Película no encontrada" });
   }
@@ -77,12 +88,12 @@ app.get("/movies/:id", (req, res) => {
   res.json(movie);
 });
 
-// GET - Obtener butacas
+// Obtener butacas
 app.get("/seats", (req, res) => {
   res.json(seats);
 });
 
-// POST - Reservar butaca
+// Reservar butaca
 app.post("/seats/reserve", (req, res) => {
   const { row, col } = req.body;
 
@@ -94,7 +105,7 @@ app.post("/seats/reserve", (req, res) => {
   res.json({ message: "Butaca reservada", seats });
 });
 
-// POST - Agregar película
+// Agregar película
 app.post("/movies", (req, res) => {
   const newMovie = {
     id: movies.length + 1,
@@ -105,9 +116,12 @@ app.post("/movies", (req, res) => {
   res.json(newMovie);
 });
 
-/* SERVIDOR */
+/* =========================
+   SERVIDOR
+========================= */
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });

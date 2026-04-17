@@ -1,17 +1,16 @@
 {
-  "name": "programacion-movil",
+  "name": "cine-api",
   "version": "1.0.0",
+  "description": "API REST de cine con Node.js, Express e imágenes",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "keywords": [],
+  "keywords": ["api", "node", "express", "cine"],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^4.18.2"
   }
 }
